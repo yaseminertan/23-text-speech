@@ -12,8 +12,10 @@
     </select> 
 
     <input class="text" type="text" value="Health for all world!"></input>
-    <button onclick="start">Start</button>
-    <button onclick="stop">Stop</button>
+    <button onclick="start()">Start</button>
+    <button onclick="stop()">Stop</button>
+    Rate<input class='rate' type="range" min='0' max='2' step='0.1'>
+    Pitch<input class='pitch' type="range" min='0' max='2' step='0.1'>
 </body>
 </html>
 <script>
@@ -22,14 +24,26 @@
     const text=document.querySelector('.text');
 
     const message=new SpeechSynthesisUtterance();
-   
     message.text=text.value;
+  
     speechSynthesis.addEventListener('voiceschanged', setvoices);
     let voices=[];
     option.addEventListener('change', changeVoice);
 
+    const rate=document.querySelector('.rate');
+    const pitch=document.querySelector('.pitch');
+    rate.addEventListener('change',rateChange);
+    pitch.addEventListener('change',rateChange);
+    function rateChange(){
+        speechSynthesis.cancel();
+        message.rate=rate.value;
+        message.pitch=pitch.value;
+        speechSynthesis.speak(message);
+    }
     function changeVoice(){
+        speechSynthesis.cancel();
         message.voice=voices.find(voice=>voice.name===this.value);
+        speechSynthesis.speak(message);
     }
     function setvoices(){
         voices=this.getVoices();
@@ -57,5 +71,6 @@
         width: 300px;
         height: 100px;
         margin-top: 40px;
+        margin-bottom: 20px;
     }
 </style>
