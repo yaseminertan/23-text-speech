@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <select class="voices">
+        <option>Select Voices</option>
+    </select> 
+
+    <input class="text" type="text" value="Health for all world!"></input>
+    <button onclick="start">Start</button>
+    <button onclick="stop">Stop</button>
+</body>
+</html>
+<script>
+
+    const option=document.querySelector('.voices');
+    const text=document.querySelector('.text');
+
+    const message=new SpeechSynthesisUtterance();
+   
+    message.text=text.value;
+    speechSynthesis.addEventListener('voiceschanged', setvoices);
+    let voices=[];
+    option.addEventListener('change', changeVoice);
+
+    function changeVoice(){
+        message.voice=voices.find(voice=>voice.name===this.value);
+    }
+    function setvoices(){
+        voices=this.getVoices();
+        option.innerHTML=voices.map(voice=>`<option value="${voice.name}">${voice.name}(${voice.lang})</option>`).join('');
+    }
+    function start(){
+        message.text=text.value;
+        speechSynthesis.speak(message);
+    }
+    function stop(){
+        speechSynthesis.cancel();
+    }
+
+</script>
+<style>
+    body{
+        padding: 20px;
+        background-color: rgb(12, 117, 151);
+    }
+    .voices{
+        width: 300px;
+    }
+    .text{
+        display: block;
+        width: 300px;
+        height: 100px;
+        margin-top: 40px;
+    }
+</style>
